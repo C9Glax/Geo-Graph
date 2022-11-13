@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32602.215
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Geo-Graph", "Geo-Graph.csproj", "{EF4D56E4-CF6A-42FE-99B5-65704B2A8810}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EF4D56E4-CF6A-42FE-99B5-65704B2A8810}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF4D56E4-CF6A-42FE-99B5-65704B2A8810}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF4D56E4-CF6A-42FE-99B5-65704B2A8810}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF4D56E4-CF6A-42FE-99B5-65704B2A8810}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E8DD4CCB-A1D1-4E29-9F29-43B22AC8DDB1}
+	EndGlobalSection
+EndGlobal
