@@ -50,7 +50,24 @@ namespace GeoGraph
 
         public bool RemoveNode(Node n)
         {
-            throw new NotImplementedException();
+            ulong? key = null;
+            foreach(KeyValuePair<ulong, Node> kv in this.nodes)
+            {
+                if (kv.Value.Equals(n))
+                {
+                    key = kv.Key;
+                    break;
+                }
+            }
+            if(key != null)
+            {
+                this.nodes.Remove((ulong)key);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public Node ClosestNodeToCoordinates(float lat, float lon)
