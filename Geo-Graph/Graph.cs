@@ -10,6 +10,11 @@ namespace GeoGraph
             this.nodes = new();
         }
 
+        public void Trim()
+        {
+            this.nodes.TrimExcess();
+        }
+
         public bool AddNode(ulong id, Node n)
         {
             return this.nodes.TryAdd(id, n);
@@ -43,6 +48,11 @@ namespace GeoGraph
             return this.nodes.Remove(id);
         }
 
+        /// <summary>
+        /// DEPRECATED Use RemoveNode(ulong id) wherever possible for better runtime.
+        /// </summary>
+        /// <param name="n">Node n to remove</param>
+        /// <returns></returns>
         public bool RemoveNode(Node n)
         {
             ulong? key = null;
@@ -65,6 +75,11 @@ namespace GeoGraph
             }
         }
 
+        /// <summary>
+        /// Returns a Dictionary with count as length of randomly selected Nodes
+        /// </summary>
+        /// <param name="count">Count of Dictionary Entries</param>
+        /// <returns>Dictionary of Node-ids and Node</returns>
         public Dictionary<ulong, Node> GetRandomNodes(uint count)
         {
             Random random = new Random();
@@ -78,6 +93,12 @@ namespace GeoGraph
             return temp;
         }
 
+        /// <summary>
+        /// Returns the Node-id closest to the given parameter-coordinates
+        /// </summary>
+        /// <param name="lat"></param>
+        /// <param name="lon"></param>
+        /// <returns>id or null if graph is empty</returns>
         public ulong? ClosestNodeIdToCoordinates(float lat, float lon)
         {
             if (this.nodes.Count == 0)
@@ -98,9 +119,14 @@ namespace GeoGraph
             return closestId;
         }
 
+        /// <summary>
+        /// Returns the Node closest to the given parameter-coordinates
+        /// </summary>
+        /// <param name="lat"></param>
+        /// <param name="lon"></param>
+        /// <returns>Node or null if graph is empty</returns>
         public Node? ClosestNodeToCoordinates(float lat, float lon)
         {
-
             ulong? id = ClosestNodeIdToCoordinates(lat, lon);
             return id != null ? this.nodes[(ulong)id] : null;
         }
