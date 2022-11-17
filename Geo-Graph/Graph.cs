@@ -70,9 +70,65 @@ namespace GeoGraph
             }
         }
 
-        public Node ClosestNodeToCoordinates(float lat, float lon)
+        public ulong GetRandomNodeId()
         {
-            throw new NotImplementedException();
+            int r = new Random().Next();
+            return this.nodes.Take(new Range(r, r)).First().Key;
+        }
+
+        public Dictionary<ulong, Node> GetRandomNodes(uint count)
+        {
+            Random random = new Random();
+            Dictionary<ulong, Node> temp = new();
+            for (int i = 0; i < count; i++)
+            {
+                int r = random.Next();
+                temp.Concat(this.nodes.Take(new Range(r, r)));
+            }
+            return temp;
+        }
+
+        public ulong? ClosestNodeIdToCoordinates(float lat, float lon, bool approx)
+        {
+            if (this.nodes.Count == 0)
+                return null;
+
+            /*
+             * When approximating start at x points and search for the path getting closest to coordinates
+             */
+            if (approx)
+            {
+                int startPoints = 10;
+
+                return null; //TODO
+            }
+
+            /*
+             * Measure Distance to every node
+             */
+            else
+            {
+                ulong? closestId = null;
+                double closestDistance = double.MaxValue, distance;
+
+                foreach (KeyValuePair<ulong, Node> kv in this.nodes)
+                {
+                    distance = Utils.Utils.DistanceBetween(lat, lon, kv.Value.lat, kv.Value.lon);
+                    if (distance < closestDistance)
+                    {
+                        closestDistance = distance;
+                        closestId = kv.Key;
+                    }
+                }
+                return closestId;
+            }
+        }
+
+        public Node? ClosestNodeToCoordinates(float lat, float lon, bool approx)
+        {
+
+            ulong? id = ClosestNodeIdToCoordinates(lat, lon, approx);
+            return id != null ? this.nodes[(ulong)id] : null;
         }
     }
 }
