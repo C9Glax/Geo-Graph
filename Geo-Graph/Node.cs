@@ -24,7 +24,7 @@
 
         public override string ToString()
         {
-            string ret = string.Format("{0:000.00000}#{1:000.00000}", lat, lon);
+            string ret = string.Format("Node {0:000.00000}#{1:000.00000}", lat, lon);
             foreach(Edge e in this.edges)
             {
                 ret = string.Format("{0}\n{1}", ret, e.ToString());
