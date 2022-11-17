@@ -108,5 +108,10 @@ namespace GeoGraph
             ulong? id = ClosestNodeIdToCoordinates(lat, lon);
             return id != null ? this.nodes[(ulong)id] : null;
         }
+
+        public override string ToString()
+        {
+            return String.Format("Graph Nodes: {0}", this.nodes.Count);
+        }
     }
 }
