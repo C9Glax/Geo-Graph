@@ -12,6 +12,14 @@ namespace GeoGraph
 
         public void Trim()
         {
+            List<ulong> toRemove = new();
+            foreach(KeyValuePair<ulong, Node> pair in this.nodes)
+            {
+                if(pair.Value.edges.Count == 0)
+                    toRemove.Add(pair.Key);
+            }
+            foreach(ulong key in toRemove)
+                this.nodes.Remove(key);
             this.nodes.TrimExcess();
         }
 
