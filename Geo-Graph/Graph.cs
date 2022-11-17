@@ -15,11 +15,6 @@ namespace GeoGraph
             return this.nodes.TryAdd(id, n);
         }
 
-        public Node NodeAtIndex(int i)
-        {
-            return this.nodes.Values.ToArray()[i];
-        }
-
         public int GetNodeCount()
         {
             return this.nodes.Count;
@@ -76,8 +71,9 @@ namespace GeoGraph
             Dictionary<ulong, Node> temp = new();
             for (int i = 0; i < count; i++)
             {
-                int r = random.Next();
-                temp.Concat(this.nodes.Take(new Range(r, r)));
+                int r = random.Next(0, this.nodes.Count);
+                KeyValuePair<ulong, Node> kv = this.nodes.Take(new Range(r, r+1)).First();
+                temp.Add(kv.Key, kv.Value);
             }
             return temp;
         }
