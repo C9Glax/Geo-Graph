@@ -1,4 +1,4 @@
-﻿namespace Graph.Utils
+﻿namespace GeoGraph.Utils
 {
     public struct Utils
     {

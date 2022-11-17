@@ -1,4 +1,4 @@
-﻿namespace Graph
+﻿namespace GeoGraph
 {
     public class Node
     {

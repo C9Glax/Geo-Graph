@@ -1,5 +1,5 @@
 ﻿
-namespace Graph
+namespace GeoGraph
 {
     public class Graph
     {
