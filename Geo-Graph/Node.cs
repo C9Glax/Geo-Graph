@@ -31,5 +31,26 @@
             }
             return ret;
         }
+
+        public override bool Equals(object? obj)
+        {
+            if(obj != null && obj.GetType().Equals(this.GetType()))
+            {
+                Node n = (Node)obj;
+                if (n.lat == this.lat && n.lon == this.lon)
+                    return true;
+                else
+                    return false;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(lat, lon);
+        }
     }
 }
