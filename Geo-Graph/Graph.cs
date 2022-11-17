@@ -113,7 +113,7 @@ namespace GeoGraph
 
                 foreach (KeyValuePair<ulong, Node> kv in this.nodes)
                 {
-                    distance = Utils.Utils.DistanceBetween(lat, lon, kv.Value.lat, kv.Value.lon);
+                    distance = Utils.DistanceBetween(lat, lon, kv.Value.lat, kv.Value.lon);
                     if (distance < closestDistance)
                     {
                         closestDistance = distance;
