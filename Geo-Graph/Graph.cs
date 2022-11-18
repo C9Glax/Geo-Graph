@@ -33,6 +33,15 @@ namespace GeoGraph
             return this.nodes.Count;
         }
 
+        public ulong? GetNodeId(Node n)
+        {
+            foreach(KeyValuePair<ulong, Node> kv in this.nodes)
+            {
+                if(kv.Value.Equals(n)) return kv.Key;
+            }
+            return null;
+        }
+
         public Node? GetNode(ulong id)
         {
             if (this.nodes.TryGetValue(id, out Node? n))
