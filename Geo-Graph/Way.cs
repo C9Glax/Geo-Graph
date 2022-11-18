@@ -6,7 +6,7 @@
         private Dictionary<string, object> tags;
 
 
-        public Dictionary<wayType, int> speedcar = new() {
+        public static Dictionary<wayType, int> speedcar = new() {
                 { wayType.NONE, 0 },
                 { wayType.motorway, 110 },
                 { wayType.trunk, 100 },
@@ -38,7 +38,7 @@
                 { wayType.construction, 0 }
             };
 
-        public Dictionary<wayType, int> speedped = new() {
+        public static Dictionary<wayType, int> speedped = new() {
                 { wayType.NONE, 0 },
                 { wayType.motorway, 0 },
                 { wayType.trunk, 0 },
@@ -71,7 +71,7 @@
             };
         public enum wayType { NONE, motorway, trunk, primary, secondary, tertiary, unclassified, residential, motorway_link, trunk_link, primary_link, secondary_link, tertiary_link, living_street, service, pedestrian, track, bus_guideway, escape, raceway, road, busway, footway, bridleway, steps, corridor, path, cycleway, construction }
 
-        public enum speedType { pedestrian, car }
+        public enum speedType { pedestrian, car, road }
 
         public Way()
         {
@@ -139,7 +139,18 @@
 
         public int GetMaxSpeed(speedType type)
         {
-            if(type == speedType.car)
+            if(type == speedType.road)
+            {
+                if (this.tags.ContainsKey("maxspeed"))
+                {
+                    return (int)this.tags["maxspeed"];
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            else if(type == speedType.car)
             {
                 if (this.tags.ContainsKey("maxspeed"))
                 {
