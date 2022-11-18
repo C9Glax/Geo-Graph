@@ -118,15 +118,12 @@ namespace GeoGraph
         /// <returns>id or null if graph is empty</returns>
         public ulong? ClosestNodeIdToCoordinates(float lat, float lon)
         {
-            if (this.nodes.Count == 0)
-                return null;
-
             ulong? closestId = null;
             double closestDistance = double.MaxValue, distance;
 
             foreach (KeyValuePair<ulong, Node> kv in this.nodes)
             {
-                distance = Utils.DistanceBetween(lat, lon, kv.Value.lat, kv.Value.lon);
+                distance = Utils.DistanceBetween(kv.Value, lat, lon);
                 if (distance < closestDistance)
                 {
                     closestDistance = distance;
@@ -134,6 +131,29 @@ namespace GeoGraph
                 }
             }
             return closestId;
+        }
+
+        /// <summary>
+        /// Returns the Node closest to the given parameter-coordinates
+        /// </summary>
+        /// <param name="lat"></param>
+        /// <param name="lon"></param>
+        /// <returns>id or null if graph is empty</returns>
+        public Node? ClosestNodeToCoordinates(float lat, float lon)
+        {
+            Node? closest = null;
+            double closestDistance = double.MaxValue, distance;
+
+            foreach (KeyValuePair<ulong, Node> kv in this.nodes)
+            {
+                distance = Utils.DistanceBetween(kv.Value, lat, lon);
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closest = kv.Value;
+                }
+            }
+            return closest;
         }
 
         /// <summary>
