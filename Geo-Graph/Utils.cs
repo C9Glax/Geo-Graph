@@ -25,7 +25,7 @@
             double rlat1 = DegreesToRadians(lat1);
             double rlat2 = DegreesToRadians(lat2);
             double drlon = DegreesToRadians(lon2 - lon1);
-            const int R = 6371;
+            const int R = 6371000;
 
             double d = Math.Acos(Math.Sin(rlat1) * Math.Sin(rlat2) + Math.Cos(rlat1) * Math.Cos(rlat2) * Math.Cos(drlon)) * R;
 
@@ -37,7 +37,7 @@
             /*
              * From https://www.movable-type.co.uk/scripts/latlong.html
              */
-            const int R = 6371;
+            const int R = 6371000;
             double rlat1 = DegreesToRadians(lat1);
             double rlat2 = DegreesToRadians(lat2);
             double rdlat = DegreesToRadians(lat2 - lat1);
