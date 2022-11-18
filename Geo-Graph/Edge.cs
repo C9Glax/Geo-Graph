@@ -17,7 +17,7 @@
 
         public override string ToString()
         {
-            return string.Format("Edge ID: {0} Time: {1} Distance: {2:0000.00}km", this.id, TimeSpan.FromSeconds(this.time), this.distance);
+            return string.Format("Edge ID: {0} Time: {1} Distance: {2:0000.00}m", this.id, TimeSpan.FromSeconds(this.time), this.distance);
         }
     }
 }
