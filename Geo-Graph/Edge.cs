@@ -6,7 +6,7 @@ namespace GeoGraph
     {
         public ulong id { get; }
         public Node neighbor { get; }
-        public int? maxSpeed { get; }
+        public byte? maxSpeed { get; }
 
         public Way.wayType wayType { get; }
         public float distance { get; }
@@ -25,16 +25,16 @@ namespace GeoGraph
             return string.Format("Edge ID: {0} RoadType: {1} MaxSpeed: {2} Distance: {3:0000.00}m", this.id, this.wayType, this.maxSpeed, this.distance);
         }
 
-        public int GetMaxSpeed(speedType speedType)
+        public byte GetMaxSpeed(speedType speedType)
         {
             switch(speedType)
             {
                 case speedType.pedestrian:
                     return Way.speedped[this.wayType];
                 case speedType.car:
-                    return maxSpeed != null ? (int)maxSpeed : Way.speedcar[this.wayType];
+                    return maxSpeed != null ? (byte)maxSpeed : Way.speedcar[this.wayType];
                 default:
-                    return maxSpeed != null ? (int)maxSpeed : 0;
+                    return maxSpeed != null ? (byte)maxSpeed : (byte)0;
             }
         }
     }

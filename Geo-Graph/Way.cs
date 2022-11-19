@@ -6,7 +6,7 @@
         private Dictionary<string, object> tags;
 
 
-        public static Dictionary<wayType, int> speedcar = new() {
+        public static Dictionary<wayType, byte> speedcar = new() {
                 { wayType.NONE, 0 },
                 { wayType.motorway, 110 },
                 { wayType.trunk, 100 },
@@ -38,7 +38,7 @@
                 { wayType.construction, 0 }
             };
 
-        public static Dictionary<wayType, int> speedped = new() {
+        public static Dictionary<wayType, byte> speedped = new() {
                 { wayType.NONE, 0 },
                 { wayType.motorway, 0 },
                 { wayType.trunk, 0 },
@@ -95,11 +95,11 @@
                 case "maxspeed":
                     try
                     {
-                        this.tags.Add(key, Convert.ToInt32(value));
+                        this.tags.Add(key, Convert.ToByte(value));
                     }
                     catch (FormatException)
                     {
-                        this.tags.Add(key, (int)this.GetHighwayType());
+                        this.tags.Add(key, (byte)this.GetHighwayType());
                     }
                     break;
                 case "oneway":
@@ -137,13 +137,13 @@
             return this.tags.ContainsKey("oneway") ? (bool)this.tags["oneway"] : false;
         }
 
-        public int GetMaxSpeed(speedType type)
+        public byte GetMaxSpeed(speedType type)
         {
             if(type == speedType.road)
             {
                 if (this.tags.ContainsKey("maxspeed"))
                 {
-                    return (int)this.tags["maxspeed"];
+                    return (byte)this.tags["maxspeed"];
                 }
                 else
                 {
@@ -154,7 +154,7 @@
             {
                 if (this.tags.ContainsKey("maxspeed"))
                 {
-                    return (int)this.tags["maxspeed"];
+                    return (byte)this.tags["maxspeed"];
                 }
                 else
                 {
