@@ -97,7 +97,7 @@
                     {
                         this.tags.Add(key, Convert.ToByte(value));
                     }
-                    catch (FormatException)
+                    catch (Exception)
                     {
                         this.tags.Add(key, (byte)this.GetHighwayType());
                     }
@@ -137,7 +137,7 @@
             return this.tags.ContainsKey("oneway") ? (bool)this.tags["oneway"] : false;
         }
 
-        public byte GetMaxSpeed(speedType type)
+        public byte? GetMaxSpeed(speedType type)
         {
             if(type == speedType.road)
             {
@@ -147,7 +147,7 @@
                 }
                 else
                 {
-                    return 0;
+                    return null;
                 }
             }
             else if(type == speedType.car)
