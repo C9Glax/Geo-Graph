@@ -1,68 +1,53 @@
-﻿
+﻿using Half = SystemHalf.Half;
+
 namespace GeoGraph
 {
     public class Graph
     {
-        private Dictionary<ulong, Node> nodes { get; }
+        private Dictionary<ulong, Node> Nodes { get; }
+        public int NodeCount => Nodes.Count;
 
         public Graph()
         {
-            this.nodes = new();
+            this.Nodes = new();
         }
 
         public void Trim()
         {
-            List<ulong> toRemove = new();
-            foreach(KeyValuePair<ulong, Node> pair in this.nodes)
-            {
-                if(pair.Value.edges.Count == 0)
-                    toRemove.Add(pair.Key);
-            }
+            List<ulong> toRemove = this.Nodes.Where(node => node.Value.Edges.Count == 0).Select(kv => kv.Key).ToList();
             foreach(ulong key in toRemove)
-                this.nodes.Remove(key);
-            this.nodes.TrimExcess();
+                this.Nodes.Remove(key);
+            this.Nodes.TrimExcess();
         }
 
         public bool AddNode(ulong id, Node n)
         {
-            return this.nodes.TryAdd(id, n);
-        }
-
-        public int GetNodeCount()
-        {
-            return this.nodes.Count;
+            return this.Nodes.TryAdd(id, n);
         }
 
         public ulong? GetNodeId(Node n)
         {
-            foreach(KeyValuePair<ulong, Node> kv in this.nodes)
-            {
-                if(kv.Value.Equals(n)) return kv.Key;
-            }
-            return null;
+            return this.Nodes.FirstOrDefault(node => node.Value == n).Key;
         }
 
         public Node? GetNode(ulong id)
         {
-            if (this.nodes.TryGetValue(id, out Node? n))
-                return n;
-            else
-                return null;
+            return this.Nodes.FirstOrDefault(node => node.Key == id).Value;
         }
 
         public bool ContainsNode(ulong id)
         {
-            return this.nodes.ContainsKey(id);
+            return this.Nodes.ContainsKey(id);
         }
 
         public bool ContainsNode(Node n)
         {
-            return this.nodes.Values.Contains(n);
+            return this.Nodes.Values.Contains(n);
         }
 
         public bool RemoveNode(ulong id)
         {
-            return this.nodes.Remove(id);
+            return this.Nodes.Remove(id);
         }
 
         /// <summary>
@@ -72,24 +57,10 @@ namespace GeoGraph
         /// <returns></returns>
         public bool RemoveNode(Node n)
         {
-            ulong? key = null;
-            foreach(KeyValuePair<ulong, Node> kv in this.nodes)
-            {
-                if (kv.Value.Equals(n))
-                {
-                    key = kv.Key;
-                    break;
-                }
-            }
-            if(key != null)
-            {
-                this.nodes.Remove((ulong)key);
-                return true;
-            }
-            else
-            {
+            ulong? key = this.GetNodeId(n);
+            if (key is null)
                 return false;
-            }
+            return this.RemoveNode((ulong)key);
         }
 
         /// <summary>
@@ -103,8 +74,8 @@ namespace GeoGraph
             Dictionary<ulong, Node> temp = new();
             for (int i = 0; i < count; i++)
             {
-                int r = random.Next(0, this.nodes.Count);
-                KeyValuePair<ulong, Node> kv = this.nodes.Take(new Range(r, r+1)).First();
+                int r = random.Next(0, this.Nodes.Count);
+                KeyValuePair<ulong, Node> kv = this.Nodes.Take(new Range(r, r+1)).First();
                 temp.Add(kv.Key, kv.Value);
             }
             return temp;
@@ -116,12 +87,12 @@ namespace GeoGraph
         /// <param name="lat"></param>
         /// <param name="lon"></param>
         /// <returns>id or null if graph is empty</returns>
-        public ulong? ClosestNodeIdToCoordinates(float lat, float lon)
+        public ulong? ClosestNodeIdToCoordinates(Half lat, Half lon)
         {
             ulong? closestId = null;
-            double closestDistance = double.MaxValue, distance;
+            Half closestDistance = Half.MaxValue, distance;
 
-            foreach (KeyValuePair<ulong, Node> kv in this.nodes)
+            foreach (KeyValuePair<ulong, Node> kv in this.Nodes)
             {
                 distance = Utils.DistanceBetween(kv.Value, lat, lon);
                 if (distance < closestDistance)
@@ -139,15 +110,15 @@ namespace GeoGraph
         /// <param name="lat"></param>
         /// <param name="lon"></param>
         /// <returns>Node or null if graph is empty</returns>
-        public Node? ClosestNodeToCoordinates(float lat, float lon)
+        public Node? ClosestNodeToCoordinates(Half lat, Half lon)
         {
             ulong? id = ClosestNodeIdToCoordinates(lat, lon);
-            return id != null ? this.nodes[(ulong)id] : null;
+            return id is not null ? this.GetNode((ulong)id) : null;
         }
 
         public override string ToString()
         {
-            return String.Format("Graph Nodes: {0}", this.nodes.Count);
+            return $"Graph Nodes: {this.Nodes.Count}";
         }
     }
 }

@@ -1,47 +1,46 @@
-﻿namespace GeoGraph
+﻿using Half = SystemHalf.Half;
+
+namespace GeoGraph
 {
     public class Node
     {
-        public float lat { get; }
-        public float lon { get; }
+        public readonly Half Lat;
+        public readonly Half Lon;
 
-        public HashSet<Edge> edges { get; }
+        public List<Edge> Edges { get; }
 
-        public Node(float lat, float lon)
+        public Node(double lat, double lon) : this(new Half(lat), new Half(lon))
         {
-            this.lat = lat;
-            this.lon = lon;
-            this.edges = new();
+        }
+        
+        public Node(float lat, float lon) : this(new Half(lat), new Half(lon))
+        {
+        }
+
+        public Node(Half lat, Half lon)
+        {
+            this.Lat = lat;
+            this.Lon = lon;
+            this.Edges = new();
         }
 
         public Edge? GetEdgeToNode(Node n)
         {
-            foreach (Edge e in this.edges)
-                if (e.neighbor == n)
-                    return e;
-            return null;
+            return Edges.FirstOrDefault(e => e.Neighbor == n);
         }
 
         public override string ToString()
         {
-            string ret = string.Format("Node {0:000.00000}#{1:000.00000}", lat, lon);
-            for(int i = 0; i < this.edges.Count; i++)
-            {
-                ret = string.Format("{0}\n{1}: {2}", ret, i, this.edges.ToArray()[i].ToString());
-
-            }
-            return ret;
+            return $"Node {this.Lat:000.00000}#{this.Lon:000.00000}\n" +
+                   $"\t{string.Join("\n\t", Edges.Select(e => e.ToString()))}";
         }
 
         public override bool Equals(object? obj)
         {
-            if(obj != null && obj.GetType().Equals(this.GetType()))
+            if(obj != null && obj.GetType() == this.GetType())
             {
                 Node n = (Node)obj;
-                if (n.lat == this.lat && n.lon == this.lon)
-                    return true;
-                else
-                    return false;
+                return n.Lat == this.Lat && n.Lon == this.Lon;
             }
             else
             {
@@ -51,7 +50,7 @@
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(lat, lon);
+            return HashCode.Combine(this.Lat, this.Lon);
         }
     }
 }

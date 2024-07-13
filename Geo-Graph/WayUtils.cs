@@ -1,0 +1,68 @@
+﻿namespace GeoGraph;
+
+public static class WayUtils
+{
+    public static Dictionary<WayType, byte> SpeedPedestrian = new() {
+        { WayType.NONE, 0 },
+        { WayType.motorway, 0 },
+        { WayType.trunk, 0 },
+        { WayType.primary, 0 },
+        { WayType.secondary, 0 },
+        { WayType.tertiary, 0 },
+        { WayType.unclassified, 1 },
+        { WayType.residential, 3 },
+        { WayType.motorway_link, 0 },
+        { WayType.trunk_link, 0 },
+        { WayType.primary_link, 0 },
+        { WayType.secondary_link, 0 },
+        { WayType.tertiary_link, 0 },
+        { WayType.living_street, 5 },
+        { WayType.service, 2 },
+        { WayType.pedestrian, 5 },
+        { WayType.track, 0 },
+        { WayType.bus_guideway, 0 },
+        { WayType.escape, 0 },
+        { WayType.raceway, 0 },
+        { WayType.road, 3 },
+        { WayType.busway, 0 },
+        { WayType.footway, 4 },
+        { WayType.bridleway, 1 },
+        { WayType.steps, 2 },
+        { WayType.corridor, 3 },
+        { WayType.path, 4 },
+        { WayType.cycleway, 2 },
+        { WayType.construction, 0 }
+    };
+    
+    public static Dictionary<WayType, byte> SpeedCar = new() {
+        { WayType.NONE, 0 },
+        { WayType.motorway, 110 },
+        { WayType.trunk, 100 },
+        { WayType.primary, 80 },
+        { WayType.secondary, 80 },
+        { WayType.tertiary, 70 },
+        { WayType.unclassified, 20 },
+        { WayType.residential, 10 },
+        { WayType.motorway_link, 50 },
+        { WayType.trunk_link, 50 },
+        { WayType.primary_link, 30 },
+        { WayType.secondary_link, 25 },
+        { WayType.tertiary_link, 25 },
+        { WayType.living_street, 10 },
+        { WayType.service, 0 },
+        { WayType.pedestrian, 0 },
+        { WayType.track, 0 },
+        { WayType.bus_guideway, 0 },
+        { WayType.escape, 0 },
+        { WayType.raceway, 0 },
+        { WayType.road, 25 },
+        { WayType.busway, 0 },
+        { WayType.footway, 0 },
+        { WayType.bridleway, 0 },
+        { WayType.steps, 0 },
+        { WayType.corridor, 0 },
+        { WayType.path, 0 },
+        { WayType.cycleway, 0 },
+        { WayType.construction, 0 }
+    };
+}
