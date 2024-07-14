@@ -1,6 +1,4 @@
-﻿using Half = SystemHalf.Half;
-
-namespace GeoGraph
+﻿namespace GeoGraph
 {
     public class Graph
     {
@@ -119,10 +117,10 @@ namespace GeoGraph
             return temp;
         }
         
-        public ulong? ClosestNodeIdToCoordinates(Half lat, Half lon)
+        public ulong? ClosestNodeIdToCoordinates(float lat, float lon)
         {
             ulong? closestId = null;
-            Half closestDistance = Half.MaxValue, distance;
+            double closestDistance = double.MaxValue, distance;
 
             foreach (KeyValuePair<ulong, Node> kv in this.Nodes)
             {
@@ -136,7 +134,7 @@ namespace GeoGraph
             return closestId;
         }
         
-        public Node? ClosestNodeToCoordinates(Half lat, Half lon)
+        public Node? ClosestNodeToCoordinates(float lat, float lon)
         {
             ulong? id = ClosestNodeIdToCoordinates(lat, lon);
             return id is not null ? this.GetNode((ulong)id) : null;

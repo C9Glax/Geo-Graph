@@ -1,28 +1,18 @@
-﻿using Half = SystemHalf.Half;
-
-namespace GeoGraph
+﻿namespace GeoGraph
 {
     public readonly struct Node
     { 
-        public readonly Half Lat;
-        public readonly Half Lon;
+        public readonly float Lat;
+        public readonly float Lon;
 
         public List<ulong> WayIds { get; }
 
-        public Node(string lat, string lon) : this(Half.Parse(lat), Half.Parse(lon))
+        public Node(string lat, string lon) : this(float.Parse(lat), float.Parse(lon))
         {
             
         }
 
-        public Node(double lat, double lon) : this(new Half(lat), new Half(lon))
-        {
-        }
-        
-        public Node(float lat, float lon) : this(new Half(lat), new Half(lon))
-        {
-        }
-
-        public Node(Half lat, Half lon)
+        public Node(float lat, float lon)
         {
             this.Lat = lat;
             this.Lon = lon;
