@@ -2,7 +2,7 @@
 {
     public readonly struct Way
     {
-        public readonly Dictionary<ulong, ulong?> NodeIds; //Keys are node-ids, values way-ids if way intersects another at this node.
+        public readonly Dictionary<ulong, ulong[]?> NodeIds; //Keys are node-ids, values way-ids if way intersects another at this node.
         public readonly Dictionary<string, string> Tags;
 
         public ulong ID => GetId();

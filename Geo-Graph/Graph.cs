@@ -24,6 +24,30 @@ namespace GeoGraph
             GC.Collect();
         }
 
+        public void ConcatGraph(Graph graph)
+        {
+            foreach (KeyValuePair<ulong, Node> kv in graph.Nodes)
+                this.AddNode(kv.Key, kv.Value);
+            foreach(Way w in graph.Ways.Values)
+                this.AddWay(w);
+            RecalculateIntersections();
+        }
+
+        public void RecalculateIntersections()
+        {
+            foreach (ulong nodeId in this.Nodes.Keys)
+            {
+                List<Way> waysWithIntersectionAtThisNode = this.Ways.Values.Where(way => way.NodeIds.Keys.Contains(nodeId)).ToList();
+                if(waysWithIntersectionAtThisNode.Count < 2)
+                    continue;
+                
+                foreach (Way way in waysWithIntersectionAtThisNode)
+                {
+                    way.NodeIds[nodeId] = waysWithIntersectionAtThisNode.Except(new []{way}).Select(w => way.ID).ToArray();
+                }                   
+            }
+        }
+
         public bool AddNode(ulong id, Node n)
         {
             return this.Nodes.TryAdd(id, n);
