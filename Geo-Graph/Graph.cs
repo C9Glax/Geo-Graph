@@ -142,7 +142,7 @@
 
         public override string ToString()
         {
-            return $"Graph Nodes: {this.Nodes.Count}";
+            return $"Graph Nodes: {this.Nodes.Count} Ways: {this.Ways.Count}";
         }
     }
 }

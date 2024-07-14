@@ -21,7 +21,7 @@
 
         public override string ToString()
         {
-            return $"Node {Lat} {Lon}\n\tPart of Way(s): {string.Join(", ", WayIds)}";
+            return $"Node {Lat:00.000000} {Lon:000.000000}\n\tPart of Way(s): {string.Join(", ", WayIds)}";
         }
 
         public override bool Equals(object? obj)
