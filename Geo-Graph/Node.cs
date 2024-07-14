@@ -9,6 +9,11 @@ namespace GeoGraph
 
         public List<ulong> WayIds { get; }
 
+        public Node(string lat, string lon) : this(Half.Parse(lat), Half.Parse(lon))
+        {
+            
+        }
+
         public Node(double lat, double lon) : this(new Half(lat), new Half(lon))
         {
         }
