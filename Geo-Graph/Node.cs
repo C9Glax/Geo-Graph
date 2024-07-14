@@ -21,6 +21,13 @@ namespace GeoGraph
             this.WayIds = new();
         }
 
+        public void SetWayIds(IEnumerable<ulong> wayIds)
+        {
+            this.WayIds.Clear();
+            foreach(ulong id in wayIds)
+                this.WayIds.Add(id);
+        }
+
         public override string ToString()
         {
             return $"Node {Lat:00.000000} {Lon:000.000000}\n\tPart of Way(s): {string.Join(", ", WayIds)}";

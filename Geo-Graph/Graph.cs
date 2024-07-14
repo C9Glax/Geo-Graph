@@ -33,16 +33,16 @@
 
         public void RecalculateIntersections()
         {
-            foreach (ulong nodeId in this.Nodes.Keys)
+            foreach (KeyValuePair<ulong, Node> kv in this.Nodes)
             {
-                List<Way> waysWithIntersectionAtThisNode = this.Ways.Values.Where(way => way.NodeIds.Keys.Contains(nodeId)).ToList();
+                List<Way> waysWithIntersectionAtThisNode = this.Ways.Values.Where(way => way.NodeIds.Keys.Contains(kv.Key)).ToList();
                 if(waysWithIntersectionAtThisNode.Count < 2)
                     continue;
                 
                 foreach (Way way in waysWithIntersectionAtThisNode)
-                {
-                    way.NodeIds[nodeId] = waysWithIntersectionAtThisNode.Except(new []{way}).Select(w => way.ID).ToArray();
-                }                   
+                    way.NodeIds[kv.Key] = waysWithIntersectionAtThisNode.Except(new []{way}).Select(w => way.ID).ToArray();
+
+                kv.Value.SetWayIds(waysWithIntersectionAtThisNode.Select(w => w.ID));
             }
         }
 
