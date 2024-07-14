@@ -1,4 +1,6 @@
-﻿namespace GeoGraph
+﻿using System.Globalization;
+
+namespace GeoGraph
 {
     public readonly struct Node
     { 
@@ -7,7 +9,7 @@
 
         public List<ulong> WayIds { get; }
 
-        public Node(string lat, string lon) : this(float.Parse(lat), float.Parse(lon))
+        public Node(string lat, string lon) : this(float.Parse(lat, NumberStyles.Float, NumberFormatInfo.InvariantInfo), float.Parse(lon, NumberStyles.Float, NumberFormatInfo.InvariantInfo))
         {
             
         }
@@ -29,7 +31,7 @@
             if(obj != null && obj.GetType() == this.GetType())
             {
                 Node n = (Node)obj;
-                return n.Lat == this.Lat && n.Lon == this.Lon;
+                return Math.Abs(n.Lat - this.Lat) < 0.0001 && Math.Abs(n.Lon - this.Lon) < 0.0001;
             }
             else
             {
