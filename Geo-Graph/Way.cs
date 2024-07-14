@@ -2,118 +2,81 @@
 {
     public readonly struct Way
     {
-        public readonly List<ulong> NodeIds;
-        public readonly Dictionary<string, object> Tags;
-        public bool OneWay => IsOneWay();
-        public bool Forward => IsForward();
+        public readonly Dictionary<ulong, ulong?> NodeIds; //Keys are node-ids, values way-ids if way intersects another at this node.
+        public readonly Dictionary<string, string> Tags;
 
-        public Way()
-        {
-            this.NodeIds = new List<ulong>();
-            this.Tags = new();
-        }
+        public ulong ID => GetId();
+        public WayType WayType => GetHighwayType();
+        public bool IsOneWay => GetOneWay();
 
         public Way(List<ulong>? nodeIds = null, Dictionary<string, string>? tags = null)
         {
-            this.NodeIds = nodeIds ?? new();
+            this.NodeIds = new();
+            if(nodeIds is not null)
+                foreach(ulong id in nodeIds)
+                    NodeIds.TryAdd(id, null);
             this.Tags = new();
-            if(tags is not null)
-                foreach(KeyValuePair<string, string> tag in tags)
-                    AddTag(tag.Key, tag.Value);
+            this.Tags = tags ?? new();
         }
-        
-        public void AddTag(string key, string value)
+
+        private ulong GetId()
         {
-            switch (key)
+            return this.Tags.TryGetValue("id", out string? idTag) ? Convert.ToUInt64(idTag) : 0;
+        }
+
+        private WayType GetHighwayType()
+        {
+            if (this.Tags.TryGetValue("highway", out string? highwayTag))
             {
-                case "highway":
-                    try
-                    {
-                        this.Tags.Add(key, (WayType)Enum.Parse(typeof(WayType), value, true));
-                    }
-                    catch (ArgumentException)
-                    {
-                        this.Tags.Add(key, WayType.NONE);
-                    }
-                    break;
-                case "maxspeed":
-                    try
-                    {
-                        this.Tags.Add(key, Convert.ToByte(value));
-                    }
-                    catch (Exception)
-                    {
-                        this.Tags.Add(key, (byte)this.GetHighwayType());
-                    }
-                    break;
-                case "oneway":
-                    switch (value)
-                    {
-                        case "yes":
-                            this.Tags.Add(key, true);
-                            break;
-                        case "-1":
-                            this.Tags.Add("forward", false);
-                            break;
-                        case "no":
-                            this.Tags.Add(key, false);
-                            break;
-                    }
-                    break;
-                case "id":
-                    this.Tags.Add(key, Convert.ToUInt64(value));
-                    break;
-            }
-        }
-
-        public ulong GetId()
-        {
-            return this.Tags.ContainsKey("id") ? (ulong)this.Tags["id"] : 0;
-        }
-
-        public WayType GetHighwayType()
-        {
-            return this.Tags.TryGetValue("highway", out object? tag) ? (WayType)tag : WayType.NONE;
-        }
-
-        public bool IsOneWay()
-        {
-            return this.Tags.TryGetValue("oneway", out object? oneway) && (bool)oneway;
-        }
-
-        public byte? GetMaxSpeed(SpeedType type)
-        {
-            if(type == SpeedType.road)
-            {
-                if (this.Tags.TryGetValue("maxspeed", out object? tag))
+                try
                 {
-                    return (byte)tag;
+                    return (WayType)Enum.Parse(typeof(WayType), highwayTag, true);
                 }
-                else
+                catch (ArgumentException)
                 {
-                    return null;
+                    return WayType.NONE;
                 }
             }
-            else if(type == SpeedType.car)
-            {
-                if (this.Tags.TryGetValue("maxspeed", out object? tag))
-                {
-                    return (byte)tag;
-                }
-                else
-                {
-                    return WayUtils.SpeedCar[this.GetHighwayType()];
-                }
-            }
-            else
-            {
-                return WayUtils.SpeedPedestrian[this.GetHighwayType()];
-            }
+            return WayType.NONE;
         }
 
-        public bool IsForward()
+        private bool GetOneWay()
         {
-            return !this.Tags.TryGetValue("forward", out object? forward) && (bool)forward!;
+            if (this.Tags.TryGetValue("oneway", out string? onewayTag))
+            {
+                return onewayTag switch
+                {
+                    "yes" => true,
+                    "-1" => false,
+                    "no" => false,
+                    _ => false
+                };
+            }
+
+            return true;
+        }
+
+        private byte? GetMaxSpeed(SpeedType type)
+        {
+            return type switch
+            {
+                SpeedType.road => this.Tags.TryGetValue("maxspeed", out string? tag)
+                    ? Convert.ToByte(tag)
+                    : null,
+                SpeedType.car => this.Tags.TryGetValue("maxspeed", out string? tag)
+                    ? Convert.ToByte(tag)
+                    : WayUtils.SpeedCar[this.GetHighwayType()],
+                SpeedType.pedestrian => this.Tags.TryGetValue("maxspeed", out string? tag)
+                    ? Convert.ToByte(tag)
+                    : WayUtils.SpeedPedestrian[this.GetHighwayType()],
+                _ => null
+            };
+        }
+
+        public override string ToString()
+        {
+            return $"Way {ID} along Nodes with intersecting Ways {string.Join(", ", NodeIds.Select(i => $"{i.Key}{(i.Value is null ? "" : $"/{i.Value}")}"))}\n" +
+                   $"\tTags:\t{string.Join("\n\t\t", Tags.Select(t => $"{t.Key}={t.Value}"))}";
         }
     }
 }

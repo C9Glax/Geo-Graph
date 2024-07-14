@@ -5,19 +5,23 @@ namespace GeoGraph
     public class Graph
     {
         private Dictionary<ulong, Node> Nodes { get; }
+        private Dictionary<ulong, Way> Ways { get; }
         public int NodeCount => Nodes.Count;
+        public int WayCount => Ways.Count;
 
         public Graph()
         {
             this.Nodes = new();
+            this.Ways = new();
         }
 
         public void Trim()
         {
-            List<ulong> toRemove = this.Nodes.Where(node => node.Value.Edges.Count == 0).Select(kv => kv.Key).ToList();
+            List<ulong> toRemove = this.Nodes.Where(node => node.Value.WayIds.Count == 0).Select(kv => kv.Key).ToList();
             foreach(ulong key in toRemove)
                 this.Nodes.Remove(key);
             this.Nodes.TrimExcess();
+            GC.Collect();
         }
 
         public bool AddNode(ulong id, Node n)
@@ -27,12 +31,12 @@ namespace GeoGraph
 
         public ulong? GetNodeId(Node n)
         {
-            return this.Nodes.FirstOrDefault(node => node.Value == n).Key;
+            return this.Nodes.ContainsValue(n) ? this.Nodes.First(kv => kv.Value.Equals(n)).Key : null;
         }
 
         public Node? GetNode(ulong id)
         {
-            return this.Nodes.FirstOrDefault(node => node.Key == id).Value;
+            return this.Nodes.TryGetValue(id, out Node node) ? node : null;
         }
 
         public bool ContainsNode(ulong id)
@@ -49,12 +53,7 @@ namespace GeoGraph
         {
             return this.Nodes.Remove(id);
         }
-
-        /// <summary>
-        /// DEPRECATED Use RemoveNode(ulong id) wherever possible for better runtime.
-        /// </summary>
-        /// <param name="n">Node n to remove</param>
-        /// <returns></returns>
+        
         public bool RemoveNode(Node n)
         {
             ulong? key = this.GetNodeId(n);
@@ -63,11 +62,26 @@ namespace GeoGraph
             return this.RemoveNode((ulong)key);
         }
 
-        /// <summary>
-        /// Returns a Dictionary with count as length of randomly selected Nodes
-        /// </summary>
-        /// <param name="count">Count of Dictionary Entries</param>
-        /// <returns>Dictionary of Node-ids and Node</returns>
+        public bool AddWay(Way way)
+        {
+            return this.Ways.TryAdd(way.ID, way);
+        }
+
+        public Way? GetWay(ulong id)
+        {
+            return this.Ways.TryGetValue(id, out Way way) ? way : null;
+        }
+
+        public bool RemoveWay(ulong id)
+        {
+            return this.Ways.Remove(id);
+        }
+
+        public bool RemoveWay(Way way)
+        {
+            return this.RemoveWay(way.ID);
+        }
+        
         public Dictionary<ulong, Node> GetRandomNodes(uint count)
         {
             Random random = new Random();
@@ -80,13 +94,7 @@ namespace GeoGraph
             }
             return temp;
         }
-
-        /// <summary>
-        /// Returns the Node-id closest to the given parameter-coordinates
-        /// </summary>
-        /// <param name="lat"></param>
-        /// <param name="lon"></param>
-        /// <returns>id or null if graph is empty</returns>
+        
         public ulong? ClosestNodeIdToCoordinates(Half lat, Half lon)
         {
             ulong? closestId = null;
@@ -103,13 +111,7 @@ namespace GeoGraph
             }
             return closestId;
         }
-
-        /// <summary>
-        /// Returns the Node closest to the given parameter-coordinates
-        /// </summary>
-        /// <param name="lat"></param>
-        /// <param name="lon"></param>
-        /// <returns>Node or null if graph is empty</returns>
+        
         public Node? ClosestNodeToCoordinates(Half lat, Half lon)
         {
             ulong? id = ClosestNodeIdToCoordinates(lat, lon);

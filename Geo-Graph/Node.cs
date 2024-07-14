@@ -2,12 +2,12 @@
 
 namespace GeoGraph
 {
-    public class Node
-    {
+    public readonly struct Node
+    { 
         public readonly Half Lat;
         public readonly Half Lon;
 
-        public List<Edge> Edges { get; }
+        public List<ulong> WayIds { get; }
 
         public Node(double lat, double lon) : this(new Half(lat), new Half(lon))
         {
@@ -21,18 +21,12 @@ namespace GeoGraph
         {
             this.Lat = lat;
             this.Lon = lon;
-            this.Edges = new();
-        }
-
-        public Edge? GetEdgeToNode(Node n)
-        {
-            return Edges.FirstOrDefault(e => e.Neighbor == n);
+            this.WayIds = new();
         }
 
         public override string ToString()
         {
-            return $"Node {this.Lat:000.00000}#{this.Lon:000.00000}\n" +
-                   $"\t{string.Join("\n\t", Edges.Select(e => e.ToString()))}";
+            return $"Node {Lat} {Lon}\n\tPart of Way(s): {string.Join(", ", WayIds)}";
         }
 
         public override bool Equals(object? obj)
